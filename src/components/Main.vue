@@ -2,10 +2,12 @@
 import axios from 'axios'
 import store from '../store'
 import Card from './Card.vue'
+import Counter from './Counter.vue'
 
 export default {
     components: {
         Card,
+        Counter,
     },
     data() {
         return {
@@ -37,10 +39,10 @@ export default {
 <template>
     <main class="main-content">
         <div class="container">
+            <Counter />
             <div class="grid">
                 <Card v-for="card in store.cards" :key="card.id" :card="card" :imgSrc="card.card_images[0].image_url" />
             </div>
-
         </div>
     </main>
 </template>
@@ -56,6 +58,7 @@ export default {
         background-color: white;
         padding: 20px;
         justify-content: center;
+        flex-direction: column;
     }
 }
 
