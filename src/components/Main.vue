@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios'
+import store from '../store'
 import Card from './Card.vue'
 
 export default {
@@ -8,7 +9,12 @@ export default {
     },
     data() {
         return {
-            cards: [],
+            store,
+        }
+    },
+    computed: {
+        cards() {
+            return this.store.cards
         }
     },
     methods: {
@@ -17,7 +23,7 @@ export default {
                 .then((res) => {
                     //console.log(res, res.data, res.data.data)
                     const card = res.data.data
-                    this.cards = card
+                    this.store.cards = card
                     //console.log(card.card_images)
                 })
         }
@@ -32,7 +38,7 @@ export default {
     <main class="main-content">
         <div class="container">
             <div class="grid">
-                <Card v-for="card in cards" :key="card.id" :card="card" :imgSrc="card.card_images[0].image_url" />
+                <Card v-for="card in store.cards" :key="card.id" :card="card" :imgSrc="card.card_images[0].image_url" />
             </div>
 
         </div>
