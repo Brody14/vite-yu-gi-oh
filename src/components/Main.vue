@@ -3,13 +3,13 @@ import axios from 'axios'
 import store from '../store'
 import Card from './Card.vue'
 import Counter from './Counter.vue'
-import Filter from './Filter.vue'
+import Filters from './Filters.vue'
 
 export default {
     components: {
         Card,
         Counter,
-        Filter,
+        Filters,
     },
     data() {
         return {
@@ -22,23 +22,28 @@ export default {
         },
         search() {
             return this.store.search
-        }
+        },
     },
     methods: {
         fetchCards() {
             const search = this.store.search
             //console.log(search)
+            const level = this.store.selectedLevel
 
-            axios.get(`https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0&fname=${search}`)
-                .then((res) => {
-                    //console.log(res, res.data, res.data.data)
-                    const card = res.data.data
-                    this.store.cards = card
-                    //console.log(card.card_images)
-                }).catch((error) => {
-                    //console.log(error)
-                    this.store.cards = []
-                })
+            axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0', {
+                params: {
+                    fname: search,
+                    level: level,
+                }
+            }).then((res) => {
+                //console.log(res, res.data, res.data.data)
+                const card = res.data.data
+                this.store.cards = card
+                //console.log(card.card_images)
+            }).catch((error) => {
+                //console.log(error)
+                this.store.cards = []
+            })
         }
     },
     mounted() {
@@ -50,7 +55,7 @@ export default {
 <template>
     <main class="main-content">
         <div class="container">
-            <Filter @onSearch="fetchCards" />
+            <Filters @onSearch="fetchCards" @onLevelChange="fetchCards" />
         </div>
         <div class="container">
             <Counter />
