@@ -3,11 +3,13 @@ import axios from 'axios'
 import store from '../store'
 import Card from './Card.vue'
 import Counter from './Counter.vue'
+import Filter from './Filter.vue'
 
 export default {
     components: {
         Card,
         Counter,
+        Filter,
     },
     data() {
         return {
@@ -38,6 +40,9 @@ export default {
 
 <template>
     <main class="main-content">
+        <div class="container">
+            <Filter />
+        </div>
         <div class="container">
             <Counter />
             <div class="grid">
