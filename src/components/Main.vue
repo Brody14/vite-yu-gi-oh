@@ -19,16 +19,25 @@ export default {
     computed: {
         cards() {
             return this.store.cards
+        },
+        search() {
+            return this.store.search
         }
     },
     methods: {
         fetchCards() {
-            axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
+            const search = this.store.search
+            //console.log(search)
+
+            axios.get(`https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0&fname=${search}`)
                 .then((res) => {
                     //console.log(res, res.data, res.data.data)
                     const card = res.data.data
                     this.store.cards = card
                     //console.log(card.card_images)
+                }).catch((error) => {
+                    //console.log(error)
+                    this.store.cards = []
                 })
         }
     },
@@ -41,12 +50,15 @@ export default {
 <template>
     <main class="main-content">
         <div class="container">
-            <Filter />
+            <Filter @onSearch="fetchCards" />
         </div>
         <div class="container">
             <Counter />
-            <div class="grid">
-                <Card v-for="card in store.cards" :key="card.id" :card="card" :imgSrc="card.card_images[0].image_url" />
+            <div v-if="store.cards.length > 0" class="grid">
+                <Card v-for="card in cards" :key="card.id" :card="card" :imgSrc="card.card_images[0].image_url" />
+            </div>
+            <div v-else>
+                <p class="error">Non è stato trovato nessun risultato per: {{ search }}</p>
             </div>
         </div>
     </main>
@@ -71,5 +83,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 30px
+}
+
+.error {
+    padding: 20px 0;
+    text-align: center;
+    color: red;
+    font-size: 24px;
 }
 </style>

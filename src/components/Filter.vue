@@ -1,6 +1,7 @@
 <template>
     <div>
-        <input class="search" type="text" v-model="store.search" placeholder="Filtra per nome">
+        <input @keyup.enter="$emit('onSearch')" class="search" type="text" v-model="store.search"
+            placeholder="Filtra per nome">
     </div>
 </template>
 
@@ -11,7 +12,6 @@ export default {
     data() {
         return {
             store,
-            search: '',
         }
     }
 }
